@@ -13,6 +13,15 @@ Description:
         Simple queuing using MongoDB backend and a hybrid of Queue and pymongo
         syntax.
         
+        Install
+        -------
+        
+        This package is currently not on PyPI but you can install it with the following command.
+        
+        .. code:: 
+        
+            # pip install https://github.com/srhopkins/mongoqueue/zipball/master
+        
         Instantiating a Queue
         ---------------------
         
@@ -164,4 +173,5 @@ Description:
         
         
 Platform: UNKNOWN
-Classifier: Private :: Do Not Upload
+Classifier: Development Status :: 3 - Alpha
+Classifier: Programming Language :: Python :: 2.7

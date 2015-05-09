@@ -23,6 +23,7 @@ setup(
     py_modules=['mongoqueue'],
     include_package_data=True,
     classifiers=[
-        'Private :: Do Not Upload',
+        'Development Status :: 3 - Alpha',
+        'Programming Language :: Python :: 2.7',
     ],
 )

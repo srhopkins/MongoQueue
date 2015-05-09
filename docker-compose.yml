@@ -1,6 +1,23 @@
-packager:
+sdist:
   build: .
   volumes:
-    - .:/tmp/package
+    - package:/tmp/package
   working_dir: /tmp/package
   command: python setup.py sdist
+
+wheel:
+  build: .
+  volumes:
+    - package:/tmp/package
+  working_dir: /tmp/package
+  command: python setup.py bdist_wheel
+
+register:
+  build: .
+  volumes:
+    - package:/tmp/package
+  working_dir: /tmp/package
+  environment:
+    - ENV
+    - PASSWORD
+  command: /root/register.sh
