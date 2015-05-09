@@ -9,9 +9,11 @@ Install
 -------
 
 This package is currently not on PyPI but you can install it with the following command.
+
 .. code:: bash
 
 pip install https://github.com/srhopkins/mongoqueue/zipball/master
+
 Instantiating a Queue
 ---------------------
 
