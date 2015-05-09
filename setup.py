@@ -1,3 +1,4 @@
+# Based on https://hynek.me/articles/sharing-your-labor-of-love-pypi-quick-and-dirty/
 import os
 
 from setuptools import setup
