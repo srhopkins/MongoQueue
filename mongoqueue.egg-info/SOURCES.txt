@@ -1,0 +1,13 @@
+AUTHORS.rst
+HISTORY.rst
+LICENSE
+MANIFEST.in
+README.rst
+mongoqueue.py
+setup.cfg
+setup.py
+mongoqueue.egg-info/PKG-INFO
+mongoqueue.egg-info/SOURCES.txt
+mongoqueue.egg-info/dependency_links.txt
+mongoqueue.egg-info/requires.txt
+mongoqueue.egg-info/top_level.txt

@@ -1,0 +1,6 @@
+packager:
+  build: .
+  volumes:
+    - .:/tmp/package
+  working_dir: /tmp/package
+  command: python setup.py sdist
