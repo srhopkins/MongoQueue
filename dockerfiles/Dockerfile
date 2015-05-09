@@ -11,7 +11,11 @@ WORKDIR /
 COPY init.sh .
 RUN chmod +x /init.sh
 
-RUN git clone https://github.com/srhopkins/MongoQueue.git /notebooks
+RUN pip install https://github.com/srhopkins/mongoqueue/zipball/master
+
+RUN mkdir /notebooks
 WORKDIR /notebooks
+
+COPY examples.ipynb /notebooks/
 
 ENTRYPOINT ["/init.sh"]
