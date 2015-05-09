@@ -12,7 +12,7 @@ This package is currently not on PyPI but you can install it with the following 
 
 .. ::
 
-pip install https://github.com/srhopkins/mongoqueue/zipball/master
+    pip install https://github.com/srhopkins/mongoqueue/zipball/master
 
 Instantiating a Queue
 ---------------------
