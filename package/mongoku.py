@@ -4,7 +4,7 @@ from bson.objectid import ObjectId
 
 status_queued = {"status": "queued"}
 status_working = {"status": "working"}
-status_error = {"status": "error"}
+#status_error = {"status": "error"}
 status_done = {"status": "done"}
 
 class QueueMaster():
@@ -47,7 +47,7 @@ class MongoQueue():
                                           update={"$set": status_working},
                                           new=True)
              
-    def gets(self, query=status_queued):
+    def get_generator(self, query=status_queued):
         # Returns a generator to loop through work.
         while True:
             item = self.get(query)
