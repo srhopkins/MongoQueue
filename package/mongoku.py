@@ -4,7 +4,7 @@ from bson.objectid import ObjectId
 
 status_queued = {"status": "queued"}
 status_working = {"status": "working"}
-#status_error = {"status": "error"}
+status_error = {"status": "error"}
 status_done = {"status": "done"}
 
 class QueueMaster():
@@ -39,6 +39,10 @@ class MongoQueue():
         commit = dict(status_queued.items() + item.items())
         rec = self.queue.insert(commit)
         
+    def puts(self, items):
+        commit = [{"meta": status_queued, "item": item} for item in items]
+        self.queue.insert(commit, {"ordered": True})
+        
     def get(self, query=status_queued):
         # Returns one single work item, oldest first.
         # Watch out if you are just trying to view the record; use .find instead.
@@ -47,7 +51,7 @@ class MongoQueue():
                                           update={"$set": status_working},
                                           new=True)
              
-    def get_generator(self, query=status_queued):
+    def gets(self, query=status_queued):
         # Returns a generator to loop through work.
         while True:
             item = self.get(query)
