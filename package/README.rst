@@ -1,5 +1,5 @@
 
-MongoQueue
+mongoku
 ==========
 
 Simple queuing using MongoDB backend and a hybrid of Queue and pymongo
