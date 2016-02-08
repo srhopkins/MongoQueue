@@ -2,11 +2,6 @@ from pymongo import MongoClient, MongoReplicaSetClient
 from pymongo.errors import ConnectionFailure
 from bson.objectid import ObjectId
 
-status_queued = {"status": "queued"}
-status_working = {"status": "working"}
-status_error = {"status": "error"}
-status_done = {"status": "done"}
-
 
 class Item(object):
     def __init__(self, mqueue, _dict):
