@@ -31,7 +31,7 @@ class MongoConnection():
         self.queue = self.db["%s-%s" % (queue, _id)]
 
 class MongoQueue():
-    def __init__(self, client="localhost", db="MongoQueue", queue="anonymous"):
+    def __init__(self, client="localhost", db="MongoQueue", queue="anonymous", qtype="fifo"):
         self.mongo = MongoConnection(client, db, queue)
         self.queue = self.mongo.queue
         
