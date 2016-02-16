@@ -3,11 +3,25 @@ from pymongo.errors import ConnectionFailure
 from bson.objectid import ObjectId
 
 
+class Status():
+    def __init__(self):
+        self._statuses = ["queued", "working", "exception", "done"] 
+        for status_type in self._statuses:
+            setattr(self, status_type, {"status": status_type})
+
 class Item(object):
     def __init__(self, mqueue, _dict):
         self._mqueue = mqueue
         self._dict = _dict
-        
+        for status in self._mqueue._statuses._statuses:
+            setattr(self, status, self._put_type(status))
+
+    def __setattr__(self, k, v):
+        if k == "item":
+            self._dict[k] = v
+        else:
+            self.__dict__[k] = v
+            
     @property
     def meta(self):
         return self._dict["meta"]
@@ -16,24 +30,21 @@ class Item(object):
     def item(self):
         return self._dict["item"]
     
-    def _put(self):
-        self._mqueue.put(self._dict)
+    def _put_type(self, status):
+        def _put(status=status):
+            self._dict["meta"]["status"] = status
+            old_id = self._dict["_id"]
+            del self._dict["_id"]
+            new_record = self._mqueue.queue.insert(self._dict)
+            self._mqueue.queue.delete_one({"_id": old_id})
+            self._dict = self._mqueue.find_one({"_id": new_record})
+        return _put
     
-    def queued(self):
-        pass
-    
-    def working(self):
-        pass
-    
-    def exception(self):
-        pass
-    
-    def done(self):
-        pass
+    def delete(self):
+        self._mqueue.queue.delete_one({"_id": self._dict["_id"]})
     
     
 class MongoConnection():
-    # TODO add support for MongoReplicaSetClient
     def __init__(self, client, db, queue):
         if isinstance(client, MongoClient) or isinstance(client, MongoReplicaSetClient):
             self.client = client
@@ -46,22 +57,25 @@ class MongoConnection():
         _id = str(ObjectId())
         self.queue = self.db["%s-%s" % (queue, _id)]
 
+        
 class MongoQueue():
     def __init__(self, client="localhost", db="MongoQueue", queue="anonymous", qtype="fifo"):
+        self._statuses = Status()
         self.mongo = MongoConnection(client, db, queue)
         self.queue = self.mongo.queue
         
     def put(self, item):
-        rec = self.queue.insert({
-                "meta": status_queued,
+        return self.queue.insert({
+                "meta": self._statuses.queued,
                 "item": item
                 })
         
     def puts(self, items):
-        commit = [{"meta": status_queued, "item": item} for item in items]
+        commit = [{"meta": self._statuses.queued, "item": item} for item in items]
         self.queue.insert(commit, {"ordered": True})
         
-    def get(self, query={"meta.status": "queued"}):
+    def get(self, query="queued"):
+        query = {"meta.status": query}
         # Returns one single work item, oldest first.
         # Watch out if you are just trying to view the record; use .find instead.
         # .get will always set status to working
@@ -70,7 +84,7 @@ class MongoQueue():
                                           new=True)
         return Item(self, item) if item else None
              
-    def gets(self):
+    def gets(self, query="queued"):
         # Returns a generator to loop through work.
         while True:
             item = self.get()
